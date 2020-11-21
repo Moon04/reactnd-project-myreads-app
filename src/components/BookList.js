@@ -11,7 +11,7 @@ class BookList extends Component{
     readBooks: []
   };
 
-  setBooksShelfsState = (res)=>
+  setBooksShelvesState = (res)=>
     this.setState((prevState)=>({
       currentlyReadingBooks: res.filter(book=> book.shelf === "currentlyReading") || [],
       wantToReadBooks: res.filter(book=> book.shelf === "wantToRead") || [],
@@ -23,7 +23,7 @@ class BookList extends Component{
       getAll().then(res=> this.setBooksShelfsState(res))
     ); 
 
-  componentDidMount(){ getAll().then(res=> this.setBooksShelfsState(res)); }
+  componentDidMount(){ getAll().then(res=> this.setBooksShelvesState(res)); }
 
   render(){
 
@@ -36,7 +36,7 @@ class BookList extends Component{
               {
                 this.state.currentlyReadingBooks.length === 0 && this.state.wantToReadBooks.length === 0 && this.state.readBooks.length === 0?
                   <p className="no-books">
-                    You don't have any books in your library, search about books and add them to your book shelfs!
+                    You don't have any books in your library, search about books and add them to your book shelves!
                   </p>
                 :
                   <div>
