@@ -20,7 +20,7 @@ class BookList extends Component{
   
   updateBookShelf = (book, shelf)=>
     update(book, shelf).then(res=>
-      getAll().then(res=> this.setBooksShelfsState(res))
+      getAll().then(res=> this.setBooksShelvesState(res))
     ); 
 
   componentDidMount(){ getAll().then(res=> this.setBooksShelvesState(res)); }

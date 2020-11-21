@@ -13,7 +13,9 @@ class SearchBooks extends Component {
 
   onInputChange = ({target}) =>
     this.setState((prevState)=>({
-      query: target.value
+      query: target.value,
+      queryError: '',
+      searchResultsBooks: []
     }));
 
   handleSearchInput = ({key})=>{
@@ -57,12 +59,12 @@ class SearchBooks extends Component {
           />
         }
         {
-          this.state.queryError && this.state.query? 
+          this.state.queryError? 
             <div className="search-error">
               <p>This query doesn't match any book title or author, try again!</p>
             </div>
-            :
-            null
+          :
+          null
         }
       </div>
     );
