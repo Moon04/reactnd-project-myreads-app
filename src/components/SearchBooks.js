@@ -9,33 +9,32 @@ class SearchBooks extends Component {
     query: '',
     queryError: '',
     searchResultsBooks: []
-  }
-
-  onInputChange = ({target}) =>
-    this.setState((prevState)=>({
-      query: target.value,
-      queryError: '',
-      searchResultsBooks: []
-    }));
-
-  handleSearchInput = ({key})=>{
-    if (this.state.query && key === 'Enter'){
-      search(this.state.query).then(res=> {
-        if (res.error){
-          this.setState((prevState)=>({ queryError: res.error }));
-          this.setState((prevState)=>({ searchResultsBooks: [] }));
-        }
-        else{
-          this.setState((prevState)=>({ queryError: '' }));
-          this.setState((prevState)=>({ searchResultsBooks: res }));
-        }
-      });
-    }
   };
 
-  updateBookShelf = (book, shelf)=>
-    update(book, shelf); 
+  searchBooks = (value)=>
+    search(value).then(res=> {
+      if (res.error){
+        this.setState((prevState)=>({ queryError: res.error }));
+        this.setState((prevState)=>({ searchResultsBooks: [] }));
+      }
+      else{
+        this.setState((prevState)=>({ queryError: '' }));
+        this.setState((prevState)=>({ searchResultsBooks: res }));
+      }
+    });
 
+  handleSearchInput = ({target})=>{
+    this.setState((prevState)=>({
+          query: target.value,
+          queryError: '',
+          searchResultsBooks: []
+        }));
+
+    if (target.value) this.searchBooks(target.value);
+  };
+
+  updateBookShelf = (book, shelf)=> update(book, shelf);
+  
   render(){
     return(
       <div className="search-books">
@@ -46,8 +45,7 @@ class SearchBooks extends Component {
               type="text" 
               placeholder="Search by title or author" 
               value={this.state.searchQueary} 
-              onChange={this.onInputChange} 
-              onKeyPress={this.handleSearchInput}
+              onChange={this.handleSearchInput} 
             />
           </div>
         </div>

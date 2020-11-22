@@ -6,17 +6,21 @@ import { getAll, update } from '../BooksAPI';
 class BookList extends Component{
 
   state = {
-    currentlyReadingBooks: [],
-    wantToReadBooks: [],
-    readBooks: []
+    shelves: {
+      currentlyReadingBooks: [],
+      wantToReadBooks: [],
+      readBooks: []
+    }
   };
 
   setBooksShelvesState = (res)=>
     this.setState((prevState)=>({
-      currentlyReadingBooks: res.filter(book=> book.shelf === "currentlyReading") || [],
-      wantToReadBooks: res.filter(book=> book.shelf === "wantToRead") || [],
-      readBooks: res.filter(book=> book.shelf === "read") || []
-    }))
+      shelves: {
+        currentlyReadingBooks: res.filter(book=> book.shelf === "currentlyReading") || [],
+        wantToReadBooks: res.filter(book=> book.shelf === "wantToRead") || [],
+        readBooks: res.filter(book=> book.shelf === "read") || []
+      }
+    }));
   
   updateBookShelf = (book, shelf)=>
     update(book, shelf).then(res=>
@@ -34,28 +38,21 @@ class BookList extends Component{
             </div>
             <div className="list-books-content">
               {
-                this.state.currentlyReadingBooks.length === 0 && this.state.wantToReadBooks.length === 0 && this.state.readBooks.length === 0?
+                this.state.shelves.currentlyReadingBooks.length === 0 && this.state.shelves.wantToReadBooks.length === 0 
+                  && this.state.shelves.readBooks.length === 0?
                   <p className="no-books">
                     You don't have any books in your library, search about books and add them to your book shelves!
                   </p>
                 :
-                  <div>
-                    <BookShelf 
-                      shelfTitle={"Currently Reading"} 
-                      shelfBooks={this.state.currentlyReadingBooks} 
-                      updateBookShelf={this.updateBookShelf}
-                    />
-                    <BookShelf 
-                      shelfTitle={"Want to Read"} 
-                      shelfBooks={this.state.wantToReadBooks}
-                      updateBookShelf={this.updateBookShelf}
-                    />
-                    <BookShelf 
-                      shelfTitle={"Read"} 
-                      shelfBooks={this.state.readBooks}
-                      updateBookShelf={this.updateBookShelf}
-                    />
-                  </div>
+
+                  Object.keys(this.state.shelves).map(key=>(
+                      <BookShelf 
+                        key={key}
+                        shelfTitle={key} 
+                        shelfBooks={this.state.shelves[`${key}`]} 
+                        updateBookShelf={this.updateBookShelf}
+                      />
+                  ))
               }
             </div>
             <div className="open-search">

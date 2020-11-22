@@ -4,7 +4,7 @@ import Book from './Book';
 
 const SearchBooksResults = (props)=> {
 
-  const {searchResultsBooks, updateBookShelf} = props;
+  const { searchResultsBooks, updateBookShelf } = props;
 
   return(
     <div className="search-books-results">
@@ -14,6 +14,7 @@ const SearchBooksResults = (props)=> {
             <li key={book.id}>
               <Book 
                 book={book} 
+                currentList={"search"}
                 updateBookShelf={updateBookShelf}
               />
             </li>

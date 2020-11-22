@@ -4,14 +4,19 @@ import BookShelfChanger from './BookShelfChanger';
 
 const Book = (props)=>{
 
-    const {book, updateBookShelf} = props;
+    const { book, currentList, updateBookShelf } = props;
 
     return(
         <div className="book">
             <div className="book-top">
-                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks? book.imageLinks.smallThumbnail: null})` }}></div>
+                <div className="book-cover" 
+                    style={{ width: 128, height: 193, backgroundImage: 
+                        `url(${book.imageLinks? book.imageLinks.smallThumbnail: "images/default-book-cover.jpg"})` }}
+                >
+                </div>
                 <BookShelfChanger 
-                    book={book} 
+                    book={book}
+                    currentList={currentList} 
                     updateBookShelf={updateBookShelf}
                 />
             </div>
@@ -35,6 +40,7 @@ const Book = (props)=>{
 
 Book.propTypes  = {
     book: PropTypes.object,
+    currentList: PropTypes.string,
     updateBookShelf: PropTypes.func
 };
 

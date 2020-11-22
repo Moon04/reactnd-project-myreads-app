@@ -1,44 +1,70 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { getAll } from '../BooksAPI';
 
-const BookShelfChanger = (props)=>{
+class BookShelfChanger extends Component{
 
-    const {book, updateBookShelf} = props;
+    static propTypes  = {
+        book: PropTypes.object,
+        currentList: PropTypes.string,
+        updateBookShelf: PropTypes.func
+    };
 
-    const bookShelfsList = [
-        {value: "move", text: "Move to..."},
-        {value: "currentlyReading", text: "Currently Reading"},
-        {value: "wantToRead", text: "Want to Read"},
-        {value: "read", text: "Read"},
-        {value: "none", text: "None"}
-    ];
+    state = {
+        currentBooksList: []
+    };
 
-    const onBookShelfChange = (e)=>
-        updateBookShelf(book, e.target.value);
+    getCurrentBooks = ()=>
+        getAll().then(res=>
+            this.setState((prevState)=>({
+                currentBooksList: res
+            }))
+        );
+    
+    componentDidMount(){ if (this.props.currentList === 'search') this.getCurrentBooks(); }
 
-    return(
-        <div className="book-shelf-changer">
-            <select 
-                onChange={(e)=>onBookShelfChange(e)}
-            >
-                {
-                    bookShelfsList.map(shelf=>(
-                        <option 
-                            key={shelf.value + book.id} 
-                            value={shelf.value}
-                        >
-                            {shelf.text}
-                        </option>
-                    ))
-                }
-            </select>
-        </div>
-    );
-};
+    onBookShelfChange = (e)=>{
+        this.props.updateBookShelf(this.props.book, e.target.value);
+        if (this.props.currentList === 'search') this.getCurrentBooks();
+    };
 
-BookShelfChanger.propTypes  = {
-    book: PropTypes.object,
-    updateBookShelf: PropTypes.func
-};
+    render(){
+        const { book, currentList } = this.props;
+
+        const bookShelfsList = [
+            {value: "move", text: "Move to..."},
+            {value: "currentlyReading", text: "Currently Reading"},
+            {value: "wantToRead", text: "Want to Read"},
+            {value: "read", text: "Read"},
+            {value: "none", text: "None"}
+        ];
+
+        return(
+            <div className="book-shelf-changer">
+                <select 
+                    onChange={(e)=>this.onBookShelfChange(e)}
+                    value={
+                        currentList === 'search'?
+                            (this.state.currentBooksList.filter(currentBook => currentBook.id === book.id).length > 0?
+                                this.state.currentBooksList.filter(currentBook => currentBook.id === book.id)[0].shelf
+                                :"none")
+                            :book.shelf
+                    }
+                >
+                    {
+                        bookShelfsList.map(shelf=>(
+                            <option 
+                                key={shelf.value + book.id} 
+                                value={shelf.value}
+                            >
+                                {shelf.text}
+                            </option>
+                        ))
+                    }
+                </select>
+            </div>
+        );
+    }
+}
 
 export default BookShelfChanger;

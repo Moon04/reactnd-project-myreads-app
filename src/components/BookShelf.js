@@ -4,7 +4,7 @@ import Book from './Book';
 
 const BookShelf = (props)=>{
 
-    const {shelfTitle, shelfBooks, updateBookShelf} = props;
+    const { shelfTitle, shelfBooks, updateBookShelf } = props;
 
     return(
         <div className="bookshelf">
@@ -18,6 +18,7 @@ const BookShelf = (props)=>{
                                     <li key={book.id}>
                                         <Book 
                                             book={book} 
+                                            currentList={"shelf"}
                                             updateBookShelf={updateBookShelf}
                                         />
                                     </li>
